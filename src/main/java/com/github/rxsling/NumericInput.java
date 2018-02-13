@@ -54,8 +54,8 @@ public class NumericInput<V> extends JFormattedTextField implements DefaultInput
         if (!Objects.equal(value, getValue())) {
             int caret = getCaretPosition();
             super.setValue(value);
-            caret = Math.max(caret, getText().length());
-            //setCaretPosition(caret);
+            caret = Math.min(caret, getText().length());
+            setCaretPosition(caret);
         }
     }
     

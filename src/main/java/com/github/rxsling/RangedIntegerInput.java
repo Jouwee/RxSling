@@ -1,86 +1,105 @@
 package com.github.rxsling;
 
 import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.Subject;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 
 /**
  * Ranged integer input
  */
-public class RangedIntegerInput extends ComposedComponent<RangedIntegerInput> implements DefaultInput<Integer, RangedIntegerInput> {
+public class RangedIntegerInput extends ComposedComponent<RangedIntegerInput> implements GenericRangedIntegerInput<RangedIntegerInput> {
 
     /** Default input support */
-    private final DefaultInputSupport inputSupport;
+    private final ComposedInputSupport<Integer> inputSupport;
+    /** Lower limit */
+    private int lowerLimit;
+    /** Upper limit */
+    private int upperLimit;
 
     /**
      * Creates the ranged input
      */
     public RangedIntegerInput() {
         super();
+        lowerLimit = Integer.MIN_VALUE;
+        upperLimit = Integer.MAX_VALUE;
         NumericInput valueInput = Inputs.integer();
-        this.inputSupport = new DefaultInputSupport(this) {
-            @Override
-            public Object value() {
-                return valueInput.value();
-            }
-
-            @Override
-            public GenericInput value(Object value) {
-                valueInput.value(value);
-                return (GenericInput) component;
-            }
-
-            @Override
-            public Observable valueObservable() {
-                return valueInput.valueObservable();
-            }
-
-            @Override
-            public GenericInput value(Observable value) {
-                valueInput.value(value);
-                return (GenericInput) component;
-            }
-        };
-        setLayout(new BorderLayout());
-        
-        setBorder(BorderFactory.createLineBorder(Color.RED));
-        
-        Panel outOfFocusView = Panels.create();
-        outOfFocusView.setLayout(new BorderLayout());
-        Panel focusedView = Panels.create();
-        focusedView.setLayout(new BorderLayout());
-
-        outOfFocusView.put(Labels.create().text(valueObservable().map((v) -> v.toString())).onClick((evt) -> {
-            SwingUtilities.invokeLater(() -> {
-                remove(outOfFocusView);
-                put(focusedView);
-                revalidate();
-                repaint();
-                findId("input").as(JComponent.class).requestFocus();
-            });
-        }));
-
-        focusedView.put(Inputs.integer().id("input").value(valueObservable()).subscribeValue((value) -> value((Integer)value)));
-        
-        focusedView.findId("input").as(JComponent.class).addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                remove(focusedView);
-                put(outOfFocusView);
-                revalidate();
-                repaint();
-            }
+        this.inputSupport = new ComposedInputSupport<>(this, valueInput);
+        this.inputSupport.setValueFilter((value) -> Math.min(upperLimit, Math.max(lowerLimit, value)));
+        layout(new BorderLayout());
+        Label label = Labels.create().text(valueObservable().map((val) -> String.valueOf(val)));
+        label.onDrag((e) -> {
+            value(value() + (e.getPoint().x - e.getPreviousPoint().x));
         });
-        
-//        add(Buttons.create(), BorderLayout.WEST);
-//        put(valueInput);
-        put(outOfFocusView);
-//        add(Buttons.create(), BorderLayout.EAST);
+        label.onClick((evt) -> {
+            replaceAllWith(valueInput);
+            valueInput.focus();
+        });
+        valueInput.onFocusLost((evt) -> {
+            replaceAllWith(label);
+        });
+        put(label);
+    }
+    
+    @Override
+    public RangedIntegerInput lowerLimit(int limit) {
+        int oldValue = this.lowerLimit;
+        this.lowerLimit = limit;
+        firePropertyChange("lowerLimit", oldValue, lowerLimit);
+        return this;
+    }
+
+    @Override
+    public RangedIntegerInput lowerLimit(Observable<Integer> limit) {
+        limit.subscribe((value) -> {
+            lowerLimit(value);
+        });
+        return this;
+    }
+
+    @Override
+    public int lowerLimit() {
+        return this.lowerLimit;
+    }
+
+    @Override
+    public Observable<Integer> lowerLimitObservable() {
+        Subject<Integer> subject = BehaviorSubject.createDefault(lowerLimit());
+        addPropertyChangeListener("lowerLimit", (evt) -> {
+            subject.onNext((Integer)evt.getNewValue());
+        });
+        return subject;
+    }
+
+    @Override
+    public RangedIntegerInput upperLimit(int limit) {
+        int oldValue = this.upperLimit;
+        this.upperLimit = limit;
+        firePropertyChange("upperLimit", oldValue, upperLimit);
+        return this;
+    }
+
+    @Override
+    public RangedIntegerInput upperLimit(Observable<Integer> limit) {
+        limit.subscribe((value) -> {
+            upperLimit(value);
+        });
+        return this;
+    }
+
+    @Override
+    public int upperLimit() {
+        return this.upperLimit;
+    }
+
+    @Override
+    public Observable<Integer> upperLimitObservable() {
+        Subject<Integer> subject = BehaviorSubject.createDefault(upperLimit());
+        addPropertyChangeListener("upperLimit", (evt) -> {
+            subject.onNext((Integer)evt.getNewValue());
+        });
+        return subject;
     }
     
     @Override

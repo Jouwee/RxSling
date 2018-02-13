@@ -5,6 +5,8 @@
  */
 package com.github.rxsling;
 
+import java.io.InputStream;
+
 /**
  * Interface for applying styles into components
  * 
@@ -18,6 +20,13 @@ public interface Styler<T extends Component> {
      * @param style 
      */
     public void apply(String style); 
+    
+    /**
+     * Loads a stylesheet a style to the component
+     * 
+     * @param stream 
+     */
+    public void loadStyleSheet(InputStream stream); 
     
     /**
      * Returns the component to be styled

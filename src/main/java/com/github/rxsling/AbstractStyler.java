@@ -5,17 +5,17 @@
  */
 package com.github.rxsling;
 
+import com.github.rxsling.css.StyleSheetParser;
 import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.parser.SACParserCSS3;
 import io.reactivex.functions.Consumer;
-import java.awt.Color;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 import org.w3c.css.sac.InputSource;
-import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSStyleDeclaration;
-import org.w3c.dom.css.RGBColor;
 
 /**
  * Abstract component styler
@@ -53,7 +53,6 @@ public abstract class AbstractStyler<T extends Component> implements Styler<T> {
             CSSStyleDeclaration decl = parser.parseStyleDeclaration(source);
             for (int i = 0; i < decl.getLength(); i++) {
                 final String propName = decl.item(i);
-
                 Rule rule = rulemap.get(propName);
                 if (rule == null) {
                     System.out.println("Unknown CSS property: " + propName);
@@ -61,6 +60,15 @@ public abstract class AbstractStyler<T extends Component> implements Styler<T> {
                 }
                 rule.consumer.accept(StylerValueConverter.convert(decl.getPropertyCSSValue(propName), rule.type));
             }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void loadStyleSheet(InputStream stream) {
+        try {
+            new StyleSheetParser(new InputStreamReader(stream), component).applyAllStyles();
         } catch(Exception e) {
             e.printStackTrace();
         }

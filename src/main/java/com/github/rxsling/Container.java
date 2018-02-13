@@ -4,6 +4,8 @@
  */
 package com.github.rxsling;
 
+import java.awt.LayoutManager;
+
 /**
  * Container
  * 
@@ -11,6 +13,13 @@ package com.github.rxsling;
  */
 public interface Container<T extends Container> extends Component<T> {
 
+    /**
+     * Changes the layout
+     * 
+     * @param layout 
+     */
+    public void layout(LayoutManager layout);
+    
     /**
      * Adds a component
      *
@@ -26,6 +35,23 @@ public interface Container<T extends Container> extends Component<T> {
      */
     public void put(Component component, Object layoutConstraints);
 
+        
+    /**
+     * Removes all components
+     */
+    public void clear();
+    
+        
+    /**
+     * Replaces all components with the one specified
+     *
+     * @param component
+     */
+    public default void replaceAllWith(Component component) {
+        clear();
+        put(component);
+    }
+    
     /**
      * Returns a component by it's id
      *

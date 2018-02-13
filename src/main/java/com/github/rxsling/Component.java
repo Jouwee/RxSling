@@ -4,10 +4,13 @@
  */
 package com.github.rxsling;
 
+import com.github.rxsling.events.DragEvent;
 import io.reactivex.Observable;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
+import java.io.InputStream;
 import java.util.function.Consumer;
 
 /**
@@ -124,6 +127,44 @@ public interface Component<T extends Component> {
     public Observable<Color> backgroundObservable();
 
     /**
+     * Returns the preferred width
+     * 
+     * @return preferredWidth
+     */
+    public default int preferredWidth() {        
+        return preferredSize().width;
+    }
+
+    /**
+     * Sets the preferred width
+     * 
+     * @param width
+     * @return T
+     */
+    public default T preferredWidth(int width) {
+        return preferredSize(width, preferredHeight());
+    }
+
+    /**
+     * Returns the preferred height
+     * 
+     * @return preferredWidth
+     */
+    public default int preferredHeight() {        
+        return preferredSize().width;
+    }
+
+    /**
+     * Sets the preferred height
+     * 
+     * @param height
+     * @return T
+     */
+    public default T preferredHeight(int height) {
+        return preferredSize(preferredWidth(), height);
+    }
+    
+    /**
      * Sets the preferred size of the component
      *
      * @param width
@@ -163,14 +204,53 @@ public interface Component<T extends Component> {
      * @return Dimension
      */
     public Observable<Dimension> preferredSizeObservable();
+    
+    /**
+     * Sets the focus on this component, if focusable
+     * 
+     * @return T
+     */
+    public T focus();
         
     /**
-     * Consumes on click events
+     * Consumes click events
      * 
      * @param consumer 
      * @return T
      */
     public T onClick(Consumer<MouseEvent> consumer);
+        
+    /**
+     * Consumes focus lost events
+     * 
+     * @param consumer 
+     * @return T
+     */
+    public T onFocusLost(Consumer<FocusEvent> consumer);
+        
+    /**
+     * Consumes drag start events
+     * 
+     * @param consumer 
+     * @return T
+     */
+    public T onDragStart(Consumer<DragEvent> consumer);
+    
+    /**
+     * Consumes drag events
+     * 
+     * @param consumer 
+     * @return T
+     */
+    public T onDrag(Consumer<DragEvent> consumer);
+    
+    /**
+     * Consumes drag release events
+     * 
+     * @param consumer 
+     * @return T
+     */
+    public T onDragRelease(Consumer<DragEvent> consumer);
     
     /**
      * Casts this component as another type
@@ -188,5 +268,12 @@ public interface Component<T extends Component> {
      * @return T
      */
     public T style(String style);
+    
+    /** 
+     * Applies a Style sheet to this component and its children
+     * 
+     * @param styleSheetStream
+     */
+    public T styleSheet(InputStream styleSheetStream);
 
 }

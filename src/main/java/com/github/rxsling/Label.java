@@ -20,6 +20,7 @@ public class Label extends JLabel implements DefaultLabel<Label> {
      */
     public Label() {
         super();
+        setOpaque(false);
     }
 
     @Override

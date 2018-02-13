@@ -4,10 +4,13 @@
  */
 package com.github.rxsling;
 
+import com.github.rxsling.events.DragEvent;
 import io.reactivex.Observable;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseEvent;
+import java.io.InputStream;
 import java.util.function.Consumer;
 
 /**
@@ -105,10 +108,35 @@ public interface DefaultComponent<T extends DefaultComponent> extends Component<
     public default Observable<Dimension> preferredSizeObservable() {
         return getDefaultComponentSupport().preferredSizeObservable();
     }
+
+    @Override
+    public default T focus() {
+        return getDefaultComponentSupport().focus();
+    }
     
     @Override
     public default T onClick(Consumer<MouseEvent> consumer) {
         return getDefaultComponentSupport().onClick(consumer);
+    }
+    
+    @Override
+    public default T onFocusLost(Consumer<FocusEvent> consumer) {
+        return getDefaultComponentSupport().onFocusLost(consumer);
+    }
+    
+    @Override
+    public default T onDragStart(Consumer<DragEvent> consumer) {
+        return getDefaultComponentSupport().onDragStart(consumer);
+    }
+    
+    @Override
+    public default T onDrag(Consumer<DragEvent> consumer) {
+        return getDefaultComponentSupport().onDrag(consumer);
+    }
+    
+    @Override
+    public default T onDragRelease(Consumer<DragEvent> consumer) {
+        return getDefaultComponentSupport().onDragRelease(consumer);
     }
     
     @Override
@@ -119,6 +147,11 @@ public interface DefaultComponent<T extends DefaultComponent> extends Component<
     @Override
     public default T style(String style) {
         return getDefaultComponentSupport().style(style);
+    }
+
+    @Override
+    public default T styleSheet(InputStream styleSheetStream) {
+        return getDefaultComponentSupport().styleSheet(styleSheetStream);
     }
     
     /**

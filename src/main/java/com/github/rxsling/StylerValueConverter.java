@@ -19,10 +19,25 @@ public class StylerValueConverter {
      * @return T
      */
     public static <T> T convert(CSSValue value, Class<T> type) {
+        if (type.equals(Integer.class)) {
+            return (T) integer(value);
+        }
         if (type.equals(Color.class)) {
             return (T) color(value);
         }
         throw new UnsupportedOperationException("Unknown CSS conversion to " + type);
+    }
+    
+    /**
+     * Converts a value to a integer
+     * 
+     * @param value
+     * @return Color
+     */
+    public static Integer integer(CSSValue value) {
+        String textValue = value.getCssText();
+        textValue = textValue.replace("px", "");
+        return Integer.parseInt(textValue);
     }
     
     /**

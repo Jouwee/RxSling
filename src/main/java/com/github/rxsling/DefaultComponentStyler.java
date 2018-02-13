@@ -23,6 +23,12 @@ public class DefaultComponentStyler<T extends Component> extends AbstractStyler<
         ruleMap.put("background-color", Color.class, (color) -> {
            getComponent().background(color);
         });
+        ruleMap.put("pref-height", Integer.class, (value) -> {
+           getComponent().preferredHeight(value);
+        });
+        ruleMap.put("pref-width", Integer.class, (value) -> {
+           getComponent().preferredWidth(value);
+        });
     }
     
 }

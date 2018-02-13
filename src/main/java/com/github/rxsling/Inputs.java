@@ -38,4 +38,15 @@ public class Inputs {
         return new RangedIntegerInput();
     }
     
+    /**
+     * Create a new input for ranged inputs
+     * 
+     * @param lowerLimit
+     * @param upperLimit
+     * @return RangedIntegerInput
+     */
+    public static RangedIntegerInput rangedInteger(int lowerLimit, int upperLimit) {
+        return rangedInteger().upperLimit(upperLimit).lowerLimit(upperLimit);
+    }
+    
 }
