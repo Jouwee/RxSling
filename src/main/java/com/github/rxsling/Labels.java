@@ -5,6 +5,9 @@
  */
 package com.github.rxsling;
 
+import com.github.rxsling.enums.HAlign;
+import javax.swing.Icon;
+
 /**
  * Label factory
  */
@@ -18,6 +21,27 @@ public class Labels {
      */
     public static Label create(String text) {
         return create().text(text);
+    }
+    
+    /**
+     * Creates a new label
+     * 
+     * @param text
+     * @param horizontalAlign
+     * @return Label
+     */
+    public static Label create(String text, HAlign horizontalAlign) {
+        return create().text(text).horizontalAlign(horizontalAlign);
+    }
+    
+    /**
+     * Creates a new label
+     * 
+     * @param icon
+     * @return Label
+     */
+    public static Label create(Icon icon) {
+        return create().icon(icon);
     }
     
     /**

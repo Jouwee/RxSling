@@ -5,6 +5,7 @@
  */
 package com.github.rxsling;
 
+import com.github.rxsling.enums.HAlign;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
@@ -80,6 +81,34 @@ public class DefaultLabelSupport<T extends DefaultLabel> extends DefaultComponen
         Subject<Icon> subject = BehaviorSubject.createDefault(icon());
         swingComponent().addPropertyChangeListener("icon", (evt) -> {
             subject.onNext((Icon)evt.getNewValue());
+        });
+        return subject;
+    }
+    
+    @Override
+    public T horizontalAlign(HAlign align) {
+        swingComponent().setHorizontalAlignment(align.getAwt());
+        return component;
+    }
+
+    @Override
+    public T horizontalAlign(Observable<HAlign> observable) {
+        observable.subscribe((align) -> {
+            horizontalAlign(align);
+        });
+        return component;
+    }
+
+    @Override
+    public HAlign horizontalAlign() {
+        return HAlign.fromAwt(swingComponent().getHorizontalAlignment());
+    }
+
+    @Override
+    public Observable<HAlign> horizontalAlignObservable() {
+        Subject<HAlign> subject = BehaviorSubject.createDefault(horizontalAlign());
+        swingComponent().addPropertyChangeListener("horizontalAlignment", (evt) -> {
+            subject.onNext(HAlign.fromAwt((Integer)evt.getNewValue()));
         });
         return subject;
     }

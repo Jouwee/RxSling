@@ -5,9 +5,8 @@
  */
 package com.github.rxsling;
 
+import com.github.rxsling.enums.HAlign;
 import io.reactivex.Observable;
-import java.awt.event.ActionEvent;
-import java.util.function.Consumer;
 import javax.swing.Icon;
 
 /**
@@ -76,5 +75,37 @@ public interface GenericLabel<T extends GenericLabel> extends Component<T> {
      * @return Observable
      */
     public Observable<Icon> iconObservable();
+    
+    /**
+     * Sets the horizontal alignment
+     *
+     * @param selected
+     * @return T
+     */
+    public T horizontalAlign(HAlign selected);
+
+    /**
+     * Sets the horizontal alignment
+     *
+     * @param icon
+     * @return T
+     */
+    public T horizontalAlign(Observable<HAlign> icon);
+
+    /**
+     * Returns the horizontal alignment
+     *
+     * @return HAlign
+     */
+    public HAlign horizontalAlign();
+
+    /**
+     * Returns an observable of the horizontal alignment
+     *
+     * @return Observable
+     */
+    public Observable<HAlign> horizontalAlignObservable();
+    
+    
     
 }
