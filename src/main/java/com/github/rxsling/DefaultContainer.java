@@ -15,25 +15,29 @@ import javax.swing.SwingUtilities;
 public interface DefaultContainer<T extends DefaultContainer> extends Container<T> {
 
     @Override
-    public default void layout(LayoutManager layout) {
+    public default T layout(LayoutManager layout) {
         getSwingSelf().setLayout(layout);
+        return (T) this;
     }
     
     @Override
-    public default void put(Component component) {
+    public default T put(Component component) {
         getSwingSelf().add((java.awt.Component) component);
+        return (T) this;
     }
 
     @Override
-    public default void put(Component component, Object layoutConstraints) {
+    public default T put(Component component, Object layoutConstraints) {
         getSwingSelf().add((java.awt.Component) component, layoutConstraints);
+        return (T) this;
     }
 
     @Override
-    public default void clear() {
+    public default T clear() {
         getSwingSelf().removeAll();
         getSwingSelf().revalidate();
         getSwingSelf().repaint();
+        return (T) this;
     }
 
     @Override

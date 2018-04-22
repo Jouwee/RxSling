@@ -21,12 +21,12 @@ public class ButtonGroup extends Panel {
     }
     
     @Override
-    public void put(Component component) {
+    public ButtonGroup put(Component component) {
         if (!(component instanceof GenericButton) || !(component instanceof AbstractButton)) {
             throw new IllegalArgumentException("Only buttons for ButtonGroup!");
         }
         group.add((AbstractButton) component);
-        super.put(component);
+        return (ButtonGroup) super.put(component);
     }
     
 }

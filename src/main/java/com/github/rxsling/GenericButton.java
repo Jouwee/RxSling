@@ -6,8 +6,6 @@
 package com.github.rxsling;
 
 import io.reactivex.Observable;
-import java.awt.event.ActionEvent;
-import java.util.function.Consumer;
 import javax.swing.Icon;
 
 /**

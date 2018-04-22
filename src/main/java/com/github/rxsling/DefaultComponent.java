@@ -48,6 +48,25 @@ public interface DefaultComponent<T extends DefaultComponent> extends Component<
     public default Observable<Boolean> enabledObservable() {
         return getDefaultComponentSupport().enabledObservable();
     }
+    @Override
+    public default T hint(String hint) {
+        return getDefaultComponentSupport().hint(hint);
+    }
+
+    @Override
+    public default T hint(Observable<String> hint) {
+        return getDefaultComponentSupport().hint(hint);
+    }
+
+    @Override
+    public default String hint() {
+        return getDefaultComponentSupport().hint();
+    }
+
+    @Override
+    public default Observable<String> hintObservable() {
+        return getDefaultComponentSupport().hintObservable();
+    }
     
     @Override
     public default T focusable(boolean focusable) {

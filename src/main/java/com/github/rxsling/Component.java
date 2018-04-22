@@ -64,6 +64,36 @@ public interface Component<T extends Component> {
      * @return Observable
      */
     public Observable<Boolean> enabledObservable();
+
+    /**
+     * Sets the components hint
+     *
+     * @param hint
+     * @return T
+     */
+    public T hint(String hint);
+
+    /**
+     * Sets the components hint
+     *
+     * @param hint
+     * @return T
+     */
+    public T hint(Observable<String> hint);
+
+    /**
+     * Returns the components hint
+     *
+     * @return String
+     */
+    public String hint();
+
+    /**
+     * Returns an observable of the component hint
+     *
+     * @return Observable
+     */
+    public Observable<String> hintObservable();
     
 
     /**

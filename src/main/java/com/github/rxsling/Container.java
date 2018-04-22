@@ -17,30 +17,34 @@ public interface Container<T extends Container> extends Component<T> {
      * Changes the layout
      * 
      * @param layout 
+     * @return T
      */
-    public void layout(LayoutManager layout);
+    public T layout(LayoutManager layout);
     
     /**
      * Adds a component
      *
      * @param component
+     * @return T
      */
-    public void put(Component component);
+    public T put(Component component);
 
     /**
      * Adds a component
      *
      * @param component
      * @param layoutConstraints
+     * @return T
      */
-    public void put(Component component, Object layoutConstraints);
+    public T put(Component component, Object layoutConstraints);
 
         
     /**
      * Removes all components
+     * 
+     * @return T
      */
-    public void clear();
-    
+    public T clear();
         
     /**
      * Replaces all components with the one specified

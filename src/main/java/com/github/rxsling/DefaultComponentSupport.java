@@ -15,7 +15,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -154,6 +153,34 @@ public class DefaultComponentSupport<T extends DefaultComponent> implements Comp
         Subject<Dimension> subject = BehaviorSubject.createDefault(preferredSize());
         swingComponent().addPropertyChangeListener("preferredSize", (evt) -> {
             subject.onNext((Dimension)evt.getNewValue());
+        });
+        return subject;
+    }
+    
+    @Override
+    public T hint(String hint) {
+        swingComponent().setToolTipText(hint);
+        return component;
+    }
+
+    @Override
+    public T hint(Observable<String> hint) {
+        hint.subscribe((text) -> {
+            hint(text);
+        });
+        return component;
+    }
+
+    @Override
+    public String hint() {
+        return swingComponent().getToolTipText();
+    }
+
+    @Override
+    public Observable<String> hintObservable() {
+        Subject<String> subject = BehaviorSubject.createDefault(hint());
+        swingComponent().addPropertyChangeListener("toolTipText", (evt) -> {
+            subject.onNext((String)evt.getNewValue());
         });
         return subject;
     }
