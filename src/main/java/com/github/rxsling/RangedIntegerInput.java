@@ -4,6 +4,11 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 
 /**
  * Ranged integer input
@@ -40,6 +45,28 @@ public class RangedIntegerInput extends ComposedComponent<RangedIntegerInput> im
             replaceAllWith(label);
         });
         put(label);
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g.create();
+        Rectangle b = g.getClip().getBounds();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D g3 = (Graphics2D) g2d.create();
+        double pct = 0;
+        try {
+            pct = (double)(value() - lowerLimit) / (double)(upperLimit - lowerLimit);
+        } catch (ArithmeticException e) {
+        }
+        g3.setClip(b.x, b.y, (int) (b.width * pct), b.height);
+        g3.setColor(new Color(0x505050));
+        g3.fillRoundRect(b.x, b.y, b.width - 1, b.height - 1, 5, 5);
+        g3.dispose();
+        g2d.setColor(new Color(0x303030));
+        g2d.drawRoundRect(b.x, b.y, b.width - 1, b.height - 1, 5, 5);
+        g2d.translate(2, 0);
+        paintComponents(g2d);
+        g2d.dispose();
     }
     
     @Override
